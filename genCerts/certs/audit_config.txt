@@ -1,0 +1,15 @@
+[req]
+req_extensions = v3_req
+distinguished_name = req_distinguished_name
+[ req_distinguished_name ]
+[ v3_req ]
+basicConstraints=CA:FALSE
+subjectAltName=@alt_names
+keyUsage = nonRepudiation, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
+[ alt_names ]
+DNS.1 = audit-webhook-service
+DNS.2 = audit-webhook-service.zen
+DNS.3 = audit-webhook-service.zen.svc
+DNS.4 = audit-webhook-service.zen.svc.cluster.local

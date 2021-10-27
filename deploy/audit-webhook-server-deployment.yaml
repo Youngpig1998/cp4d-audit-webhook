@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-webhook-server
+  labels:
+    app: audit-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-webhook
+  template:
+    metadata:
+      labels:
+        app: audit-webhook
+    spec:
+      containers:
+      - name: audit-webhook
+        image: "docker.io/fanzhan1/audit-webhook:testforyoung"
+        command: ["/audit-webhook"]
+        securityContext:    
+          runAsNonRoot: true
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+            scheme: HTTPS
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+            scheme: HTTPS
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            memory: 200Mi
+            cpu: 500m
+          requests:
+            memory: 100Mi
+            cpu: 300m
+        ports:
+        - containerPort: 8081
+        env:
+        - name: VOLUME_PATCH
+          valueFrom:
+            configMapKeyRef:
+              name: audit-webhook-configmap
+              key: volume_patch
+        - name: CONTAINER_PATCH
+          valueFrom:
+            configMapKeyRef:
+              name: audit-webhook-configmap
+              key: container_patch
+        volumeMounts:
+        - mountPath: /certs
+          name: certs
+          readOnly: false
+      volumes:
+        - name: certs
+          secret:
+            secretName: audit-webhook-tls-secret

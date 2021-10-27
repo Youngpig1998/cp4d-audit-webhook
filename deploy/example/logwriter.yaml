@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cp4d-logwriter-example
+  labels:
+    cp4d-audit: "yes"
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000321000
+  imagePullSecrets:
+  - name: "cp.stg.icr.io"
+  containers:
+  - name: logwriter
+    image: fanzhan1/logwriter-json-env:latest
+    securityContext:    
+      runAsNonRoot: true
+    resources:
+      limits:
+        memory: 100Mi
+        cpu: 100m
+      requests:
+        memory: 100Mi
+        cpu: 100m
+    env:
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: NODENAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: PODIPADDRESS
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    - name: CONTAINERNAME
+      value: logwriter
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+    envFrom:
+    - configMapRef:
+        name: product-configmap
+  volumes:
+  - name: varlog
+    emptyDir: {}
