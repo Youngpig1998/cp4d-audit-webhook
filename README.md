@@ -4,7 +4,7 @@ This webhook looks for pod that has `cp4d-audit: "yes"` label and injects the si
 
 ## Preqreqs
 
-#### 环境清单罗列🧾
+#### Environmental checklist🧾
 
 | Configuration item | Specific configuration |
 | :----------------: | :--------------------: |
