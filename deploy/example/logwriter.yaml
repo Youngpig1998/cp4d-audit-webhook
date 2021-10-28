@@ -8,11 +8,9 @@ spec:
   securityContext:
     runAsNonRoot: true
     runAsUser: 1000321000
-  imagePullSecrets:
-  - name: "cp.stg.icr.io"
   containers:
   - name: logwriter
-    image: fanzhan1/logwriter-json-env:latest
+    image: youngpig/logwriter:ruby
     securityContext:    
       runAsNonRoot: true
     resources:
