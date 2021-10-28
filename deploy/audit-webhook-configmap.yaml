@@ -4,6 +4,4 @@ metadata:
   name: audit-webhook-configmap
 data:
   volume_patch: '{"name":"internal-tls","secret":{"secretName":"internal-tls","defaultMode":420}}'
-  container_patch: '{"name":"sidecar","image":"fanzhan1/fluent:1.10-plugin-script","securityContext":{"runAsNonRoot":true},"resources":{"requests":{"memory":"100Mi","cpu":"100m"},"limits":{"memory":"250Mi","cpu":"250m"}},"imagePullPolicy":"IfNotPresent","args":["/bin/bash","-c","fluentd -c /fluentd/etc/fluent.conf"],"volumeMounts":[{"name":"varlog","mountPath":"/var/log"}]}'
-  #cp.stg.icr.io/cp/watson/auditing/audit-sidecar:0.1.0
-  #cp.stg.icr.io/cp/watson/auditing/rsyslog-hari:v0.0.1
+  container_patch: '{"name":"sidecar","image":"fanzhan1/fluentd:test2","securityContext":{"runAsNonRoot":true},"resources":{"requests":{"memory":"100Mi","cpu":"100m"},"limits":{"memory":"250Mi","cpu":"250m"}},"imagePullPolicy":"IfNotPresent","args":["/bin/bash","-c","fluentd -c /fluentd/etc/fluent.conf"],"volumeMounts":[{"name":"varlog","mountPath":"/var/log"}]}'

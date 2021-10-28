@@ -4,28 +4,53 @@ This webhook looks for pod that has `cp4d-audit: "yes"` label and injects the si
 
 ## Preqreqs
 
-1. Install CP4D in`zen` Namespace
-2. For OCP 3.11 - The webhook plugins are disabled by default. To enable them please follow the instructions from https://access.redhat.com/solutions/3869391
+#### 环境清单罗列🧾
+
+|   配置项   | 具体配置 |
+| :--------: | :------: |
+|  操作系统  |  centos  |
+| Kubernetes |  v1.18+  |
+
+Have Installed the cert-manager operator（Be care of the version of the operator）  ,it will create the secret we need.
+
+```shell
+kubectl apply -f $(pwd)/deploy/cert-manager.yaml
+```
+
+
 
 ## Steps to install cp4d-audit-webhook
 
-**Note:** Install only in `zen` namespace.
+1. Create an issuer
 
-1. Create a secret named`cp.stg.icr.io` to pull images from staging entitled regsitry.
+   ```
+   kubectl apply -f deploy/issuer.yaml
+   ```
 
-```shell
-kubectl create secret docker-registry  cp.stg.icr.io --docker-server='cp.stg.icr.io' --docker-username='iamapikey' --docker-password='<token>' --docker-email='user@ibm.com'
-```
+   
 
-2. oc create -f deploy/audit-webhook-tls-secret.yaml
-3. oc create -f deploy/audit-webhook-configmap.yaml
-4. oc create -f deploy/audit-webhook-server-service.yaml
-5. oc create -f deploy/audit-webhook-server-deployment.yaml
-6. oc create -f deploy/audit-mutating-webhook-configuration.yaml
+2. Create a certificate
+
+   ```
+   kubectl apply -f deploy/certificate.yaml
+   ```
+
+3. Create ConfigMap、Service、deployment and Mutatingwebhookconfiguration
+
+   ```shell
+   kubectl apply -f deploy/audit-webhook-configmap.yaml
+   kubectl apply -f deploy/audit-webhook-server-service.yaml
+   kubectl apply -f deploy/audit-webhook-server-deployment.yaml
+   kubectl apply -f deploy/audit-mutating-webhook-configuration.yaml
+   ```
+
+
 
 To test this, use the logwriter example
 
-7. oc create -f deploy/example/logwriter.yaml
+```shell
+kubectl apply -f deploy/example/logwriter.yaml
+```
 
 ## To utilize cp4d-audit-webhook
 
@@ -45,15 +70,7 @@ To test this, use the logwriter example
    - name: varlog
        emptyDir: {}
    ```
-3. Currently the sidecar image is available only in staging entitled registry, so the above mentioned `cp.stg.icr.io` secret needs to be included in the pod that utilizes webhook.
-
-## To uninstall cp4d-audit-webhook
-
-1. oc delete -f deploy/audit-mutating-webhook-configuration.yaml
-2. oc delete -f deploy/audit-webhook-server-deployment.yaml
-3. oc delete -f deploy/audit-webhook-server-service.yaml
-4. oc delete -f deploy/audit-webhook-configmap.yaml
-5. oc delete -f deploy/audit-webhook-tls-secret.yaml
+3. Currently the sidecar image is available.
 
 ## Log Augmentation and Auditing
 

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: audit-webhook
-        image: "docker.io/fanzhan1/audit-webhook:testforyoung"
+        image: "docker.io/fanzhan1/audit-webhook:v0.1.1"
         command: ["/audit-webhook"]
         securityContext:    
           runAsNonRoot: true
