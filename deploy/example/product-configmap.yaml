@@ -1,0 +1,34 @@
+apiVersion: v1
+data:
+  ALLOW_GLOBAL_ADMIN_DELETE: "false"
+  CLOUD_PAK_INSTANCE_ID: 910e0181-b097-460e-b8cc-e5bced1bf917
+  DARK_LOGIN_THEME: "false"
+  ENABLE_ALTERNATE_LOGIN_PAGE: "false"
+  ENABLE_AUDIT: "true"
+  IBM_GLOBAL_PRODUCT_NAME: IBM Cloud Pak for Data
+  IBM_PRODUCT_NAME: IBM Cloud Pak for Data
+  META_OPERATOR_NAMESPACE: ""
+  MinimumUID: "1000330000"
+  NAV_CONTEXT: icp4data
+  NAV_DEPLOYMENT_TARGET: icp4data
+  NEED_GLOBAL_COOKIES: "false"
+  NEED_LOCAL_COOKIES: "true"
+  SHOW_ACCESS_LEVELS: "true"
+  SHOW_USER_APPROVAL: "false"
+  USERMGMT_DELEGATE_URL: www.ibm.com
+  USING_ROLES: "true"
+  USING_USER_GROUPS: "true"
+  docker_registry_prefix: image-registry.openshift-image-registry.svc:5000/speechzen
+  usermgmt_allow_ldap_config_changes: "false"
+  usermgmt_delegated: "false"
+  usermgmt_enable_localrepo: "true"
+kind: ConfigMap
+metadata:
+  labels:
+    app: 0010-infra
+    chart: 0010-infra
+    component: product-configmap
+    heritage: Tiller
+    icpdata_tether_resource: "true"
+    release: 0010-infra
+  name: product-configmap

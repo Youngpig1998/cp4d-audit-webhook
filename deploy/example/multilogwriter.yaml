@@ -1,0 +1,110 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: cp4d-logwriter-example
+  labels:
+    cp4d-audit: "yes"
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000321000
+#  imagePullSecrets:
+#  - name: "cp.stg.icr.io"
+  containers:
+  - name: logwriter-1
+#    image: cp.stg.icr.io/cp/watson/auditing/logwriter-json-env-multicontainer:latest
+    image: docker.io/fanzhan1/logwriter-json-env-multicontainer:latest
+    securityContext:
+      runAsNonRoot: true
+    resources:
+      limits:
+        memory: 100Mi
+        cpu: 100m
+      requests:
+        memory: 100Mi
+        cpu: 100m
+    env:
+    - name: NAMESPACE
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: metadata.namespace
+    - name: NODENAME
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: spec.nodeName
+    - name: PODIPADDRESS
+      valueFrom:
+        fieldRef:
+          apiVersion: v1
+          fieldPath: status.podIP
+    - name: CONTAINERNAME
+      value: logwriter-1
+    volumeMounts:
+    - name: varlog
+      mountPath: /var/log
+    envFrom:
+    - configMapRef:
+        name: product-configmap
+  - name: logwriter-2
+#    image: cp.stg.icr.io/cp/watson/auditing/logwriter-json-env-multicontainer-2:latest
+    image: docker.io/fanzhan1/logwriter-json-env-multicontainer:latest
+    securityContext:
+      runAsNonRoot: true
+    resources:
+      limits:
+        memory: 100Mi
+        cpu: 100m
+      requests:
+        memory: 100Mi
+        cpu: 100m
+    env:
+      - name: NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: NODENAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: spec.nodeName
+      - name: PODIPADDRESS
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: CONTAINERNAME
+        value: logwriter-2
+    volumeMounts:
+      - name: varlog
+        mountPath: /var/log
+    envFrom:
+      - configMapRef:
+          name: product-configmap
+  - name: sidecar
+#    image: cp.stg.icr.io/cp/watson/auditing/fluentd:latest
+    image: docker.io/fanzhan1/fluentd:latest
+    securityContext:
+      runAsNonRoot: true
+    resources:
+      limits:
+        memory: 250Mi
+        cpu: 250m
+      requests:
+        memory: 100Mi
+        cpu: 100m
+    imagePullPolicy: Always
+    volumeMounts:
+      - name: varlog
+        mountPath: /var/log
+      - name: internal-tls
+        mountPath: /etc/internal-tls
+  volumes:
+  - name: varlog
+    emptyDir: {}
+  - name: internal-tls
+    secret:
+      secretName: internal-tls
+      defaultMode: 420

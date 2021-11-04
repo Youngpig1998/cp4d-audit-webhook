@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: audit-webhook-server
+  labels:
+    app: audit-webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: audit-webhook
+  template:
+    metadata:
+      labels:
+        app: audit-webhook
+    spec:
+      imagePullSecrets: 
+      - name: "cp.stg.icr.io"
+      containers:
+      - name: audit-webhook
+        image: "docker.io/youngpig/audit-webhook:latest"
+        command: ["/audit-webhook"]
+        securityContext:    
+          runAsNonRoot: true
+        resources:
+          limits:
+            memory: 200Mi
+            cpu: 500m
+          requests:
+            memory: 100Mi
+            cpu: 300m
+        ports:
+        - containerPort: 8081
+        env:
+        - name: VOLUME_PATCH
+          valueFrom:
+            configMapKeyRef:
+              name: audit-webhook-configmap
+              key: volume_patch
+        - name: CONTAINER_PATCH
+          valueFrom:
+            configMapKeyRef:
+              name: audit-webhook-configmap
+              key: container_patch
+        volumeMounts:
+        - mountPath: /certs
+          name: certs
+          readOnly: false
+      volumes:
+        - name: certs
+          secret:
+            secretName: audit-webhook-tls-secret
