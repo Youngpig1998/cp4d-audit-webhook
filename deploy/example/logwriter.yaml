@@ -10,7 +10,7 @@ spec:
     runAsUser: 1000321000
   containers:
   - name: logwriter
-    image: youngpig/logwriter:ruby
+    image: youngpig/logwriter:latest
     securityContext:    
       runAsNonRoot: true
     resources:

@@ -10,7 +10,7 @@ spec:
     runAsUser: 1000321000
   containers:
   - name: sidecar
-    image: fanzhan1/fluentd:test2
+    image: docker.io/youngpig/fluentd:latest
     ports:
     - containerPort: 9880
     imagePullPolicy: IfNotPresent
@@ -55,7 +55,7 @@ spec:
 
 
   - name: logwriter
-    image: youngpig/logwriter:ruby
+    image: youngpig/logwriter:latest
     imagePullPolicy: IfNotPresent
     securityContext:    
       runAsNonRoot: true
