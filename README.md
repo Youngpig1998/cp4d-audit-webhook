@@ -9,11 +9,11 @@ This webhook looks for pod that has `cp4d-audit: "yes"` label and injects the si
 | Configuration item | Specific configuration |
 | :----------------: | :--------------------: |
 |         OS         |         centos         |
-|     Kubernetes     |         v1.18+         |
+|     Kubernetes     |         v1.16+         |
 
 Have Installed the cert-manager operator（Be care of the version of the operator）  ,it will create the secret we need.
 
-**PS:This cert-manager operator is the old version.**
+**PS:This cert-manager operator is the old version(v0.10.0). If the Kubernetes version is too high,it maybe do not support the operator because the apiVersion is too low.**
 
 ```shell
 kubectl apply -f $(pwd)/deploy/cert-manager.yaml
