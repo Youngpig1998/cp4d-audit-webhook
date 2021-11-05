@@ -3,7 +3,8 @@ kind: MutatingWebhookConfiguration
 metadata:
   name: audit-webhook-config
   annotations:
-    certmanager.k8s.io/inject-ca-from: default/serving-cert
+    cert-manager.io/inject-ca-from: "default/serving-cert"
+    # cert-manager.io/inject-ca-from-secret: "default/audit-webhook-tls-secret"
 webhooks:
 - name: audit.watson.org
   admissionReviewVersions: ["v1", "v1beta1"]
@@ -26,6 +27,8 @@ webhooks:
       path: "/add-sidecar"
       port: 443
   failurePolicy: Ignore
+
+
 
 
 
