@@ -18,7 +18,7 @@ spec:
       - name: "cp.stg.icr.io"
       containers:
       - name: audit-webhook
-        image: "docker.io/youngpig/audit-webhook:latest"
+        image: "docker.io/youngpig/audit-webhook:test"
         command: ["/audit-webhook"]
         securityContext:    
           runAsNonRoot: true

@@ -16,7 +16,8 @@ Have Installed the cert-manager operator（Be care of the version of the operato
 **PS:This cert-manager operator is the newest version.**
 
 ```shell
-kubectl apply -f $(pwd)/deploy/cert-manager.yaml
+# kubectl apply -f $(pwd)/deploy/cert-manager.yaml
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.6.0/cert-manager.yaml
 ```
 
 
