@@ -4,4 +4,4 @@ metadata:
   name: audit-webhook-configmap
 data:
   volume_patch: '{"name":"internal-tls","secret":{"secretName":"internal-tls","defaultMode":420}}'
-  container_patch: '{"name":"sidecar","image":"quay.io/fanzhang/opencontent-fluentd:ruby-ubi-tt-1.3.0","securityContext":{"runAsNonRoot":true},"resources":{"requests":{"memory":"100Mi","cpu":"100m"},"limits":{"memory":"250Mi","cpu":"250m"}},"imagePullPolicy":"IfNotPresent","args":["/bin/bash","-c","fluentd -c /fluentd/etc/fluent.conf"],"volumeMounts":[{"name":"varlog","mountPath":"/var/log"}]}'
+  container_patch: '{"name":"sidecar","image":"docker.io/youngpig/fluentd:latest","securityContext":{"runAsNonRoot":true},"resources":{"requests":{"memory":"100Mi","cpu":"100m"},"limits":{"memory":"250Mi","cpu":"250m"}},"imagePullPolicy":"IfNotPresent","args":["/bin/bash","-c","fluentd -c /fluentd/etc/fluent.conf"],"volumeMounts":[{"name":"varlog","mountPath":"/var/log"}]}'

@@ -16,8 +16,7 @@ Have Installed the cert-manager operator（Be care of the version of the operato
 **PS:This cert-manager operator is the newest version.**
 
 ```shell
-# kubectl apply -f $(pwd)/deploy/cert-manager.yaml
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.6.0/cert-manager.yaml
+kubectl apply -f $(pwd)/deploy/cert-manager.yaml
 ```
 
 
@@ -38,6 +37,12 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
    kubectl apply -f $(pwd)/deploy/certificate.yaml
    ```
 
+PS: Watch out   the default is the namespace!!!!
+spec:
+  dnsNames:
+  - audit-webhook-service.default.svc
+   
+
 3. Create ConfigMap、Service、deployment and Mutatingwebhookconfiguration
 
    ```shell
@@ -47,6 +52,13 @@ kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/
    kubectl apply -f $(pwd)/deploy/audit-mutating-webhook-configuration.yaml
    ```
 
+PS: Watch out   the default is the namespace!!!!
+In audit-mutating-webhook-configuration.yaml:
+   1)、cert-manager.io/inject-ca-from: "default/serving-cert"
+   2）、clientConfig:
+         service:
+            name: audit-webhook-service
+            namespace: default
 
 
 To test this, use the logwriter example
