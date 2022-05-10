@@ -8,7 +8,7 @@ This webhook looks for pod that has `cp4d-audit: "yes"` label and injects the si
 
 | Configuration item | Specific configuration |
 | :----------------: | :--------------------: |
-|         OS         |         centos         |
+|         OS         |        centos7         |
 |     Kubernetes     |         v1.22+         |
 
 Have Installed the cert-manager operator（Be care of the version of the operator）  ,it will create the secret we need.
@@ -41,7 +41,7 @@ PS: Watch out   the default is the namespace!!!!
 spec:
   dnsNames:
   - audit-webhook-service.default.svc
-   
+
 
 3. Create ConfigMap、Service、deployment and Mutatingwebhookconfiguration
 
