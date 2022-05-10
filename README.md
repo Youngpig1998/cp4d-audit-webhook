@@ -8,7 +8,7 @@ This webhook looks for pod that has `cp4d-audit: "yes"` label and injects the si
 
 | Configuration item | Specific configuration |
 | :----------------: | :--------------------: |
-|         OS         |         centos         |
+|         OS         |         centos7         |
 |     Kubernetes     |         v1.16+         |
 
 Have Installed the cert-manager operator（Be care of the version of the operator）  ,it will create the secret we need.
@@ -31,7 +31,7 @@ kubectl apply -f $(pwd)/deploy/cert-manager.yaml
 
    
 
-2. Create a certificate
+2. Create a certificate（Note the dnsName field in the yaml file, the default is the namespace where the service is located）
 
    ```shell
    kubectl apply -f $(pwd)/deploy/certificate.yaml
@@ -45,6 +45,9 @@ kubectl apply -f $(pwd)/deploy/cert-manager.yaml
    kubectl apply -f $(pwd)/deploy/audit-webhook-server-deployment.yaml
    kubectl apply -f $(pwd)/deploy/audit-mutating-webhook-configuration.yaml
    ```
+
+
+PS：Note the certmanager.k8s.io/inject-ca-from field and namespace field in the audit-mutating-webhook-configuration.yaml, the default is the namespace where the service is located
 
 
 
@@ -88,8 +91,7 @@ volumes:
 
 The environment variables include NAMESPACE, CONTAINERNAME, NODENAME, PODIPADDRESS and CONTAINERID. 
 The first four environment variables can be specified in your deployment YAML file. An example is shown in [here](deploy/example/logwriter.yaml). 
-CONTAINERID, however, needs to be shared via a directory path. An example is shown in [here](logwriter/writer.sh).
-`More details` [Link here](https://github.ibm.com/PrivateCloud-analytics/zen-dev-test-utils/blob/gh-pages/docs/audit-logging.md#adding-system-environment-variables) in here.
+CONTAINERID, however, needs to be shared via a directory path.
 They will be written to a EmptyDir that will be picked up by the webhook-injected sidecar container later on.
 
 
