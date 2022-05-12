@@ -64,6 +64,7 @@ In audit-mutating-webhook-configuration.yaml:
 To test this, use the logwriter example
 
 ```shell
+kubectl apply -f $(pwd)/deploy/example/product-configmap.yaml
 kubectl apply -f $(pwd)/deploy/example/logwriter.yaml
 ```
 
